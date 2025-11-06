@@ -41,7 +41,7 @@ elif operaciones == "/":
 else:
         print("Operación no válida")
 
-#clasificador de notas 
+# 11 clasificador de notas 
 nota= int(input("Ingrese la nota del estudiante (0-100): "))
 if nota >= 100:
     print("Excelente aprobaste.")
@@ -53,7 +53,7 @@ elif nota > 70:
         print("El estudiante ha aprobado.")
 else:  
     print("El estudiante ha reprobado.")
-# comparador de 3 numeros
+# 12 comparador de 3 numeros
 num1 = float (input("Ingrese el primer número: "))
 num2 = float (input("Ingrese el segundo número: "))
 num3 = float (input("Ingrese el tercer número: "))
