@@ -12,7 +12,7 @@ for i in range(1,n+1):
 for i in range(1,11):
     print(f"{multi} x {i} = {multi*i}")'''
 
-# 16 contador con ciclo while
+# 16 cuenta regresivas con ciclo while
 '''contador= int(input("Ingrese un numero para iniciar el contador: "))
 while contador>0:
     print(contador)

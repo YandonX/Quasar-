@@ -1,5 +1,5 @@
 # 7 mayor de edad
-edad = 18 
+'''edad = 18 
 edades = int(input("Ingrese su edad: "))
 if edades >= edad:
      print("Eres mayor de edad")
@@ -39,7 +39,7 @@ elif operaciones == "/":
      resultado = num1 / num2
      print(f"el resultado de la división es: {resultado}")
 else:
-        print("Operación no válida")
+        print("Operación no válida")'''
 
 # 11 clasificador de notas 
 nota= int(input("Ingrese la nota del estudiante (0-100): "))
@@ -54,7 +54,7 @@ elif nota > 70:
 else:  
     print("El estudiante ha reprobado.")
 # 12 comparador de 3 numeros
-num1 = float (input("Ingrese el primer número: "))
+'''num1 = float (input("Ingrese el primer número: "))
 num2 = float (input("Ingrese el segundo número: "))
 num3 = float (input("Ingrese el tercer número: "))
 
@@ -70,4 +70,4 @@ if num1 <= num2 and num1 <= num3:
 elif num2 <= num1 and num2 <= num3:
     print(f"El número menor es: {num2}")
 else:
-    print(f"El número menor es: {num3}")
+    print(f"El número menor es: {num3}")'''
