@@ -37,3 +37,5 @@ costo_total = cantidad * precio
 
 # Muestra el resultado con formato (dos decimales)
 print(f"El total por {cantidad} unidades de {productos} es: {costo_total}")
+
+#https://drive.google.com/file/d/1b7Puiq2Kxsd8dEc7caHTouLjyA3OjK3O/view?usp=drive_link
