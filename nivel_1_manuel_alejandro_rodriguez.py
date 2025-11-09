@@ -36,4 +36,6 @@ print(type(Area))
 edad_futura = edad + 10
 print(f"En 10 años, {usuario} tendrá {edad_futura} años.")
 
+#este si no tiene ''' por lo que veo explota gracias por leer
+
 
