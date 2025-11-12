@@ -96,16 +96,16 @@ while True:
 
     # Depositar dinero en la cuenta
     elif opcion == 3:
-        concinar= float (input("cuanto deseas consignar?: "))
-        saldo+=concinar
-        depositos.append(concinar)
-        print(f"se consignó: {concinar}")
+        transferrir= float (input("cuanto deseas consignar?: "))
+        saldo+=tranferir
+        depositos.append(transferrir)
+        print(f"se consignó: {transferrir}")
         
     # Mostrar lista de depósitos
     elif opcion == 4:
         print("has mandado: ")
-        for concinar in depositos:            
-            print(f"-{concinar}") 
+        for transferrir in depositos:            
+            print(f"-{transferir}") 
 
     # Salir
     elif opcion == 5:
@@ -116,9 +116,9 @@ while True:
 
 
 # 28 Gestión de estudiantes
-'''
+
 # Lista vacía donde se guardarán los estudiantes
-estudiantes = []
+'''estudiantes = []
 
 while True:
     print("bienvenido a master 2000")
@@ -155,7 +155,7 @@ while True:
 
         for student in estudiantes:
             if student["nombre"].lower() == nombre_buscar.lower():
-                print("✅ Estudiante encontrado:")
+                print(" Estudiante encontrado:")
                 print(f"Nombre: {student['nombre']}, Edad: {student['edad']}, Nota: {student['nota']}")
                 encontrado = True
                 break 
