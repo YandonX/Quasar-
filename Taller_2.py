@@ -1,6 +1,16 @@
+import random
+lista_ids = []
+
+def validar_id():
+    while True:
+        nuevo_id = random.randint(10000, 99999)
+        if nuevo_id not in lista_ids:
+            lista_ids.append(nuevo_id)
+            return nuevo_id
+            
+        
 def registrar_paciente():
-    value=random.randint(10000,99999)
-    list=[]
+    identifica=avalidar_id()
     if value is not in list:
         list.append(value)
         identifica=value
@@ -11,6 +21,7 @@ def registrar_paciente():
     historial = input("Ingrese el historial médico del paciente: ")
     paciente = { 'id': identifica , "nombre": nombre , "edad": edad , "genero": genero, "diagnostico": diagnostico , "historial": historial }
     with open("pacientes.txt", "a") as archivo:
+        KeyboardInterrupt
         archivo.write(f"{paciente}\n")
     
     print("Paciente registrado exitosamente.")
