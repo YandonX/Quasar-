@@ -10,10 +10,7 @@ def validar_id():
             
         
 def registrar_paciente():
-    identifica=avalidar_id()
-    if value is not in list:
-        list.append(value)
-        identifica=value
+    identifica=validar_id()
     nombre = input("Ingrese el nombre del paciente: ")
     edad = input("Ingrese la edad del paciente: ")
     genero = input("Ingrese el género del paciente: ")
@@ -21,7 +18,6 @@ def registrar_paciente():
     historial = input("Ingrese el historial médico del paciente: ")
     paciente = { 'id': identifica , "nombre": nombre , "edad": edad , "genero": genero, "diagnostico": diagnostico , "historial": historial }
     with open("pacientes.txt", "a") as archivo:
-        KeyboardInterrupt
         archivo.write(f"{paciente}\n")
     
     print("Paciente registrado exitosamente.")
@@ -35,7 +31,7 @@ def mostrar_pacientes():
                 return
             for linea in pacientes:
                 paciente = eval(linea.strip())
-                print(f"Nombre: {paciente['nombre']}, Edad: {paciente['edad']}, Género: {paciente['genero']}, Síntomas: {paciente['sintomas']}")
+                print(f"Nombre: {paciente['nombre']}, Edad: {paciente['edad']}, Género: {paciente['genero']}, Diagnostico: {paciente['diagnostico']}")
     except FileNotFoundError:
         print("No hay pacientes registrados.")
         
@@ -55,5 +51,5 @@ def main():
             break
         else:
             print("Opción no válida. Por favor, intente de nuevo.")
-if __name__ == "__main__":
-    main() 
+
+main()

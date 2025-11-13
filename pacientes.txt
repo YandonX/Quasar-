@@ -1,1 +1,0 @@
-{'nombre': 'juan', 'edad': '36', 'genero': 'masculino', 'sintomas': 'cancer'}
