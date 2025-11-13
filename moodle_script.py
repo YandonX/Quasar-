@@ -1,23 +1,59 @@
-name= input("Ingrese el nombre del producto: ")
-while True:
-    price=input("Por Favor ingrese el precio: ")
-    try:
-        price= float(price)
-        break
+def add_product():
+    inventory[name]={'Price': price, 'Quantity': quantity}
+
+def show_inventory(inventory):
+    if inventory:
+        for name, details in inventory.items():
+            print(f"Product: {name} Price: ${details['Price']} Quantity: {details['Quantity']}")
+    else:
+        print("The inventory is void")
+    
+        
+def Calculate_total_price(inventory):
+    types=0
+    value=0
+    products_quantity=0
+    if len(inventory) ==0:
+        print("You have not add anything")
+        
+    for name in inventory:
+            value+= inventory[name]['Price']*inventory[name]['Quantity']
+            products_quantity+= inventory[name]['Quantity']
+            types+= 1
+            print(f"You buy  {inventory[name]['Quantity']}  each one for:   ${inventory[name]['Price']}")
+            print(f"you have add {types} types of products in total, and in total:  {products_quantity} products")
+            print(f"The total value until now is:   ${value}")
+        
+value=0
+option=0
+inventory={}
+print("This is your inventory: \n1- add product  \n2- print product  \n3- Calculate stadistics  \n4- out\n")
+while option!=4:
+    try: 
+        option= int(input("1- Add  2- Show  3- Calculate  4- out\n"))
     except ValueError:
-        print("Asegurate de ingresar un numero, sin espacios ni puntuacion")
+        print("Error, this option isn't correct")
+        continue
 
-while True:
-    quantity= input("Ingrese la cantidad: ")
-    try:
-        quantity= int(quantity)
-        if quantity <=0:
-            print("Valor no es válido")
-        else:
-            break
-    except ValueError:
-        print("Asegurate de que ingreses números")
+    if option == 1:
+        name= input("insert the name: ")
+        try:
+            price= int(input("insert the price: "))
+            quantity= int(input("insert the quantity: "))
+        except ValueError:
+            print("the price should be a number")
+            continue
 
-total_value= quantity*price
+        add_product()
 
-print(f"compraste {quantity} {name}/s, el valor unitario es: ${price:.1f}\n por lo que el total es: ${total_value:.1f}")
+    elif option == 2:
+        show_inventory(inventory)
+
+    elif option == 3:
+        Calculate_total_price(inventory)
+
+print(f"Thank you for buy here, this is your inventory: \n {inventory}")     
+print(f"====== The total value is {value} ==========")
+    #Esto es todo por hoy
+
+#Esto es del 12/11/2025
