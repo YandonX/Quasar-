@@ -1,178 +1,269 @@
 import json
 
-lista_ids = []
+# Lista global de pacientes
+pacientes = []
 
-def cargar_pacientes():
+# ==================== FUNCIONES DE ARCHIVO ====================
+
+def cargar_datos():
+    global pacientes
     try:
-        with open("pacientes.txt", "r") as archivo:
-            lineas = archivo.readlines()
-            pacientes = []
-            for linea in lineas:
-                paciente = eval(linea.strip())
-                pacientes.append(paciente)
-                lista_ids.append(paciente['id'])
-            return pacientes
+        with open("pacientes.json", "r") as archivo:
+            pacientes = json.load(archivo)
+        print("Datos cargados correctamente")
     except FileNotFoundError:
-        return []
+        pacientes = []
+        print("No hay datos previos")
 
-def guardar_pacientes(pacientes):
-    with open("pacientes.txt", "w") as archivo:
-        for paciente in pacientes:
-            archivo.write(f"{paciente}\n")
+def guardar_datos():
+    with open("pacientes.json", "w") as archivo:
+        json.dump(pacientes, archivo, indent=4)
+    print("Datos guardados correctamente")
 
-def validar_id():
-    while True:
-        nuevo_id = int(input("Ingrese número de cédula: "))
-        if nuevo_id not in lista_ids:
-            lista_ids.append(nuevo_id)
-            return nuevo_id
-        else:
-            print("Este ID ya existe. Ingrese otro.")
+# ==================== FUNCIONES DE REGISTRO ====================
 
-def registrar_paciente(pacientes):
-    identifica = validar_id()
-    nombre = input("Ingrese el nombre del paciente: ")
-    edad = input("Ingrese la edad del paciente: ")
-    genero = ""
-    while genero.upper() != "F" and genero.upper() != "M":
-        genero = input("Ingrese el género del paciente (F) si es femenino y (M) si es masculino: ")
-    diagnostico = input("Ingrese el diagnóstico del paciente: ")
-    historial = input("Ingrese el historial médico del paciente: ")
+def registrar_paciente():
+    print("\n--- Registro de pacientes ---")
+    id_pac = input("Ingrese la cédula del paciente: ")
+    
+    for p in pacientes:
+        if p["id"] == id_pac:
+            print("Este ID ya está registrado en la base.")
+            return
+    
+    nombre = input("Nombre: ")
+    edad = int(input("Edad: "))
+    genero = input("Género (M/F): ").upper()
+    diagnostico = input("Diagnóstico: ")
+    historial = input("Historial médico: ")
     
     paciente = {
-        'id': identifica,
-        'nombre': nombre,
-        'edad': edad,
-        'genero': genero,
-        'diagnostico': diagnostico,
-        'historial': historial
+        "id": id_pac,
+        "nombre": nombre,
+        "edad": edad,
+        "genero": genero,
+        "diagnostico": diagnostico,
+        "historial": historial
     }
     
     pacientes.append(paciente)
-    guardar_pacientes(pacientes)
-    print("Paciente registrado exitosamente.")
+    guardar_datos()
+    print("Paciente registrado exitosamente")
 
-def mostrar_pacientes(pacientes):
-    if not pacientes:
-        print("No hay pacientes registrados.")
-        return
-    
-    print("\n== LISTA DE PACIENTES ==")
-    for paciente in pacientes:
-        print(f"ID: {paciente['id']}, {paciente['nombre']}, (Edad: {paciente['edad']}, Diagnóstico: {paciente['diagnostico']}, Historial: {paciente['historial']})")
+# ==================== FUNCIONES DE BÚSQUEDA ====================
 
-def modificar_paciente(pacientes):
-    if not pacientes:
-        print("No hay pacientes registrados.")
-        return
+def buscar_por_id():
+    id_buscar = input("Ingresa el ID: ")
     
-    mostrar_pacientes(pacientes)
+    for p in pacientes:
+        if p["id"] == id_buscar:
+            mostrar_paciente(p)
+            return
     
-    opcion = input("\nEscoja el ID del paciente que desea modificar (o escriba 'salir'): ")
+    print("Paciente no encontrado")
+
+def buscar_por_nombre():
+    nombre = input("Ingresa el nombre: ").lower()
+    encontrados = []
     
-    if opcion.lower() == "salir":
-        return
+    for p in pacientes:
+        if nombre in p["nombre"].lower():
+            encontrados.append(p)
     
-    if not opcion.isdigit():
-        print("Opción no válida, intente de nuevo")
-        return
-    
-    id_encontrar = int(opcion)
-    paciente_hallado = None
-    
-    for paciente in pacientes:
-        if paciente['id'] == id_encontrar:
-            paciente_hallado = paciente
-            break
-    
-    if paciente_hallado is None:
-        print("ID no hallado, intente de nuevo")
-        return
-    
-    print(f"\n-- FICHA DE {paciente_hallado['nombre'].upper()} --")
-    print(f"Edad: {paciente_hallado['edad']}")
-    print(f"Diagnóstico: {paciente_hallado['diagnostico']}")
-    print(f"Historial: {paciente_hallado['historial']}")
-    
-    print("\n¿Qué desea modificar?")
-    print("1. Edad")
-    print("2. Diagnóstico")
-    print("3. Historial")
-    print("4. Nombre")
-    print("5. Género")
-    print("6. Terminar")
-    
-    accion = input("Opción (1-6): ")
-    
-    if accion == "1":
-        nueva_edad = input("Ingrese la nueva edad: ")
-        if nueva_edad.isdigit():
-            paciente_hallado["edad"] = nueva_edad
-            print("Edad actualizada correctamente")
-        else:
-            print("Debe ingresar un número válido")
-    
-    elif accion == "2":
-        nuevo_diag = input("Escriba el nuevo diagnóstico: ")
-        paciente_hallado["diagnostico"] = nuevo_diag
-        print("Diagnóstico actualizado correctamente")
-    
-    elif accion == "3":
-        nuevo_hist = input("Ingrese el nuevo historial: ")
-        paciente_hallado['historial'] = nuevo_hist
-        print("Historial actualizado")
-    
-    elif accion == "4":
-        nuevo_nombre = input("Ingrese el nuevo nombre: ")
-        paciente_hallado['nombre'] = nuevo_nombre
-        print("Nombre actualizado correctamente")
-    
-    elif accion == "5":
-        nuevo_genero = ""
-        while nuevo_genero.upper() != "F" and nuevo_genero.upper() != "M":
-            nuevo_genero = input("Ingrese el nuevo género (F/M): ")
-        paciente_hallado['genero'] = nuevo_genero
-        print("Género actualizado correctamente")
-    
-    elif accion == "6":
-        print("Volviendo al menú principal")
-        return
-    
+    if encontrados:
+        for p in encontrados:
+            mostrar_paciente(p)
     else:
-        print("Opción no válida")
+        print("No se encontraron pacientes")
+
+def buscar_por_diagnostico():
+    diag = input("Ingresa el diagnóstico: ").lower()
+    encontrados = []
+    
+    for p in pacientes:
+        if diag in p["diagnostico"].lower():
+            encontrados.append(p)
+    
+    if encontrados:
+        for p in encontrados:
+            mostrar_paciente(p)
+    else:
+        print("No se encontraron pacientes")
+
+def mostrar_paciente(p):
+    print(f"\n{p['id']} es la identificación de {p['nombre']}, quien tiene {p['edad']}años")
+    if p['genero'].lower() == 'f':
+        print(f"Es una mujer (genero femenino)")
+    else:
+         print(f"Es un hombre (genero masculino)")
+    print(f"su Diagnóstico es: {p['diagnostico']}")
+    print(f"y tiene el siguiente historial: {p['historial']}")
+
+def menu_buscar():
+    print("\n--- BUSCAR PACIENTE ---")
+    print("1. Por ID ingrese el número (3)")
+    print("2. Por Nombre, ingrese el número (2)")
+    print("3. Por Diagnóstico, ingrese el número (3)")
+    
+    opcion = input("Opción 1, 2 o 3: ")
+    
+    if opcion == "1":
+        buscar_por_id()
+    elif opcion == "2":
+        buscar_por_nombre()
+
+    elif opcion == "3":
+        buscar_por_diagnostico()
+    else:
+        print("Opción inválida")
+
+# ==================== FUNCIONES DE ACTUALIZACIÓN ====================
+
+def actualizar_paciente():
+    id_buscar = input("ID del paciente a actualizar: ")
+    
+    for p in pacientes:
+        if p["id"] == id_buscar:
+            print("\n¿Qué deseas actualizar?")
+            print("1. Edad")
+            print("2. Diagnóstico")
+            print("3. Añadir evento al historial")
+            
+            opcion = input("Opción: ")
+            
+            if opcion == "1":
+                nueva_edad = int(input("Nueva edad: "))
+                p["edad"] = nueva_edad
+            elif opcion == "2":
+                nuevo_diag = input("Nuevo diagnóstico: ")
+                p["diagnostico"] = nuevo_diag
+            elif opcion == "3":
+                evento = input("Nuevo evento: ")
+                p["historial"] = p["historial"] + " | " + evento
+            else:
+                print("Opción inválida")
+                return
+            
+            guardar_datos()
+            print("Paciente actualizado")
+            return
+    
+    print("Paciente no encontrado")
+
+# ==================== FUNCIONES DE ELIMINACIÓN ====================
+
+def eliminar_paciente():
+    id_buscar = input("ID del paciente a eliminar: ")
+    
+    for p in pacientes:
+        if p["id"] == id_buscar:
+            print(f"\n¿Seguro que deseas eliminar a {p['nombre']}?")
+            confirmar = input("Escribe 'SI' para confirmar: ").upper()
+            
+            if confirmar == "SI":
+                pacientes.remove(p)
+                guardar_datos()
+                print("Paciente eliminado")
+            else:
+                print("Eliminación cancelada")
+            return
+    
+    print("Paciente no encontrado")
+
+# ==================== FUNCIONES DE REPORTES ====================
+
+def reporte_todos():
+    if not pacientes:
+        print("No hay pacientes registrados")
         return
     
-    guardar_pacientes(pacientes)
+    print("\n--- TODOS LOS PACIENTES ---")
+    for p in pacientes:
+        print(f"{p['id']} - {p['nombre']} ({p['edad']} años)")
 
-def main():
-    pacientes = cargar_pacientes()
+def reporte_ancianos():
+    print("\n--- PACIENTES MAYORES DE 60 AÑOS ---")
+    contador = 0
+    
+    for p in pacientes:
+        if p["edad"] > 60:
+            print(f"{p['nombre']} - {p['edad']} años")
+            contador += 1
+    
+    print(f"\nTotal: {contador} pacientes")
+
+def reporte_diagnosticos():
+    diagnosticos = {}
+    
+    for p in pacientes:
+        diag = p["diagnostico"]
+        if diag in diagnosticos:
+            diagnosticos[diag] += 1
+        else:
+            diagnosticos[diag] = 1
+    
+    print("\n--- DIAGNÓSTICOS FRECUENTES ---")
+    for diag, cantidad in diagnosticos.items():
+        print(f"{diag}: {cantidad} pacientes")
+
+def reporte_total():
+    total = len(pacientes)
+    print(f"\nTotal de pacientes registrados: {total}")
+
+def menu_reportes():
+    print("\n--- REPORTES ---")
+    print("1. Todos los pacientes")
+    print("2. Mayores de 60 años")
+    print("3. Diagnósticos frecuentes")
+    print("4. Cantidad total")
+    
+    opcion = input("Opción: ")
+    
+    if opcion == "1":
+        reporte_todos()
+    elif opcion == "2":
+        reporte_ancianos()
+    elif opcion == "3":
+        reporte_diagnosticos()
+    elif opcion == "4":
+        reporte_total()
+    else:
+        print("Opción inválida")
+
+# ==================== MENÚ PRINCIPAL ====================
+
+def menu_principal():
+    cargar_datos()
     
     while True:
-        print("\n========================================")
-        print("   SISTEMA DE REGISTRO DE PACIENTES")
-        print("========================================")
-        print("1. Registrar nuevo paciente")
-        print("2. Mostrar pacientes registrados")
-        print("3. Modificar paciente")
-        print("4. Salir")
-        print("========================================")
+        print("\n" + "="*38)
+        print("   SISTEMA DE GESTIÓN DE PACIENTES")
+        print("="*38)
+        print("1. Registrar paciente")
+        print("2. Buscar paciente")
+        print("3. Actualizar paciente")
+        print("4. Eliminar paciente")
+        print("5. Reportes")
+        print("6. Salir")
+        print("="*38)
         
-        opcion = input("\nSeleccione una opción: ")
+        opcion = input("Opción: ")
         
         if opcion == "1":
-            registrar_paciente(pacientes)
-        
+            registrar_paciente()
         elif opcion == "2":
-            mostrar_pacientes(pacientes)
-        
+            menu_buscar()
         elif opcion == "3":
-            modificar_paciente(pacientes)
-        
+            actualizar_paciente()
         elif opcion == "4":
-            print("Saliendo del sistema.")
+            eliminar_paciente()
+        elif opcion == "5":
+            menu_reportes()
+        elif opcion == "6":
+            print("¡Hasta luego!")
             break
-        
         else:
-            print("Opción no válida. Por favor, intente de nuevo.")
+            print("Opción inválida")
 
-main()
+# Iniciar el programa
+menu_principal()
