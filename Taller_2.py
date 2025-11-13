@@ -1,9 +1,8 @@
-import random
 lista_ids = []
 
 def validar_id():
     while True:
-        nuevo_id = random.randint(10000, 99999)
+        nuevo_id = int(input("Ingrese número de cedula: "))
         if nuevo_id not in lista_ids:
             lista_ids.append(nuevo_id)
             return nuevo_id
@@ -13,8 +12,10 @@ def registrar_paciente():
     identifica=validar_id()
     nombre = input("Ingrese el nombre del paciente: ")
     edad = input("Ingrese la edad del paciente: ")
-    genero = input("Ingrese el género del paciente: ")
-    diagnostico = input("Ingrese los síntomas del paciente: ")
+    genero = ""
+    while genero.upper() != "F" and genero.upper() != "M":
+        genero = input("Ingrese el género del paciente (F) si es femenino y (M) si es masculino: ")
+    diagnostico = input("Ingrese los diagnostico del paciente: ")
     historial = input("Ingrese el historial médico del paciente: ")
     paciente = { 'id': identifica , "nombre": nombre , "edad": edad , "genero": genero, "diagnostico": diagnostico , "historial": historial }
     with open("pacientes.txt", "a") as archivo:
@@ -37,7 +38,7 @@ def mostrar_pacientes():
         
 def main():
     while True:
-        print("\nSistema de Registro de Pacientes")
+        print("\nSistema de Registro del paciente")
         print("1. Registrar nuevo paciente")
         print("2. Mostrar pacientes registrados")
         print("3. Salir")
