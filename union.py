@@ -3,7 +3,7 @@ import json
 # Lista global de pacientes
 pacientes = []
 
-# ==================== FUNCIONES DE ARCHIVO ====================
+# =============== FUNCIONES DE ARCHIVO IR A JSON =================
 
 def cargar_datos():
     global pacientes
@@ -43,7 +43,7 @@ def registrar_paciente():
         "edad": edad,
         "genero": genero,
         "diagnostico": diagnostico,
-        "historial": historial
+        "historial": [historial]
     }
     
     pacientes.append(paciente)
@@ -101,9 +101,9 @@ def mostrar_paciente(p):
 
 def menu_buscar():
     print("\n--- BUSCAR PACIENTE ---")
-    print("1. Por ID ingrese el número (3)")
-    print("2. Por Nombre, ingrese el número (2)")
-    print("3. Por Diagnóstico, ingrese el número (3)")
+    print("1. Por ID (ingrese el número '1')")
+    print("2. Por Nombre, (ingrese el número '2')")
+    print("3. Por Diagnóstico, (ingrese el número '3')")
     
     opcion = input("Opción 1, 2 o 3: ")
     
@@ -139,7 +139,7 @@ def actualizar_paciente():
                 p["diagnostico"] = nuevo_diag
             elif opcion == "3":
                 evento = input("Nuevo evento: ")
-                p["historial"] = p["historial"] + " | " + evento
+                p["historial"].append(evento)
             else:
                 print("Opción inválida")
                 return
