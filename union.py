@@ -24,16 +24,39 @@ def guardar_datos():
 
 def registrar_paciente():
     print("\n--- Registro de pacientes ---")
-    id_pac = input("Ingrese la cédula del paciente: ")
+    
+    while True:
+        id_pac = input("Ingrese la cédula del paciente: ")
+        if id_pac.isdigit():
+            break
+        else:
+            print("Por favor ingrese un ID válido (solo números).")
     
     for p in pacientes:
         if p["id"] == id_pac:
             print("Este ID ya está registrado en la base.")
             return
     
-    nombre = input("Nombre: ")
-    edad = int(input("Edad: "))
-    genero = input("Género (M/F): ").upper()
+    while True:
+        nombre = input("Nombre: ")
+        if (nombre.strip()).isalpha() or " " in nombre:
+            break
+        else:
+            print("Por favor ingrese un nombre válido (sin números).")
+    while True:
+        try:
+            edad = int(input("Edad: "))
+            if edad > 0 or edad < 120:
+                break
+            else:
+                print("Por favor ingrese una edad válida (entre 1 y 119).")
+        except ValueError:
+            print("Por favor ingrese una edad válida (número entero).")
+            
+    genero= input("ingresa el Género (M) si es Masculino, (F) si es Femenino: ")
+    while genero.upper() not in ["M", "F"]:
+        genero = input("Recuerda, Solamente la primera letra (M) Masculino, (F) Femenino").upper()
+        
     diagnostico = input("Diagnóstico: ")
     historial = input("Historial médico: ")
     
@@ -56,7 +79,7 @@ def buscar_por_id():
     id_buscar = input("Ingresa el ID: ")
     
     for p in pacientes:
-        if p["id"] == id_buscar:
+        if id_buscar in p["id"]:
             mostrar_paciente(p)
             return
     
