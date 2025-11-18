@@ -39,14 +39,15 @@ def registrar_paciente():
     
     while True:
         nombre = input("Nombre: ")
-        if (nombre.strip()).isalpha() or " " in nombre:
+        if nombre.isalpha() or (nombre.replace(' ','').isalpha()):
             break
         else:
             print("Por favor ingrese un nombre válido (sin números).")
+
     while True:
         try:
             edad = int(input("Edad: "))
-            if edad > 0 or edad < 120:
+            if (edad > 0) and (edad < 120):
                 break
             else:
                 print("Por favor ingrese una edad válida (entre 1 y 119).")
