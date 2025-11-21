@@ -12,7 +12,7 @@ def guardar_datos_append(producto, ruta):
             writer.writerow(["nombre", "precio", "cantidad"])
         writer.writerow([producto["nombre"], producto["precio"], producto["cantidad"]])
         print("producto guardado en el csv (modo append)")
-#esta funsion lo que hace es guardar en la linea 5 lo que hace es verificar si el archivo existe o no esta vacio
+#esta funsion lo que hace es guardar en la linea 8 lo que hace es verificar si el archivo existe o no esta vacio
 #si esta vacio primero escribe el encabezado y escribe los datos en nueva linea
 
 
@@ -48,9 +48,28 @@ def cargar_csv(ruta):
 
 
 def agregar(inventario):
+ while True:
     nombre = input("agrega un producto nuevo: ").lower().strip()
-    precio = float(input("ingresa el precio del producto: ")) 
-    cantidad = int(input("cuantas cantidades deseas agregar?: "))
+    if any(char.isdigit() for char in nombre): #este if lo que hace es validar de que si sean letras y no numeros
+        print("el nombre debe ser con letras")
+        continue
+#coloque varios while true ya que con poner letras saltaba error tanto en el int como en el float
+#coloque 3 while tru y varios try paara que puedan validar de que si sean numeros y no letras
+    while True:
+        try:
+            precio = float(input("ingresa el precio del producto: "))
+            break
+        except ValueError:
+            print("Ingresa un numero por favor")
+    while True:
+        try:
+            cantidad = int(input("cuantas cantidades deseas agregar?: "))
+            break
+        except ValueError:
+            print("Ingresa un numero por favor otra vez")
+            continue
+
+  
 
     print("se van a guardar:")
     print(f"nombre: {nombre}")
@@ -69,6 +88,8 @@ def agregar(inventario):
         print("se agregaron correctamente")
     else:
         print("no se agrego nada")
+    break
+
 #esta funsion lo que hace es agregar los productos cantidad y precio como pueden ver
 #se le coloco un if de que si s=confirmar osea que desea hacer los cambios y si le da n=no
 #lo devuelve al menu por otra parte esto datos se guardan en una lista y si le dan en la opcion
@@ -163,7 +184,7 @@ def estadistica(inventario):
     print("Estadística:\n")
 
     for producto in inventario:
-
+        
         nombre = producto["nombre"]
         precio = producto["precio"]
         cantidad = producto["cantidad"]
