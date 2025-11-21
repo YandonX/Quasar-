@@ -1,10 +1,18 @@
-def agregar_producto(inventario, nombre, cantidad, precio):
-    """Agrega un producto al inventario."""
-    inventario.append({"nombre": nombre, "cantidad": cantidad, "precio": precio})
-    print(f"Producto '{nombre}' agregado.")
-
+def agregar_producto(inventario):
+    while True:
+        nombre = input("Nombre: ")
+        if not nombre.replace(' ','').isalpha():
+            continue
+        while True:
+            try:
+                cantidad = int(input("Cantidad: "))
+                precio = float(input("Precio: "))
+                break
+            except ValueError:
+                print("ingresa un precio o cantidad validos")
+        inventario.append({"nombre": nombre, "cantidad": cantidad, "precio": precio})
+        break
 def mostrar_inventario(inventario):
-    """Muestra todos los productos del inventario."""
     if not inventario:
         print("Inventario vacío")
         return
@@ -13,26 +21,39 @@ def mostrar_inventario(inventario):
         print(f"{item['nombre']} | {item['cantidad']} | {item['precio']}")
 
 def buscar_producto(inventario, nombre):
-    """Busca productos por nombre."""
     encontrados = [p for p in inventario if nombre.lower() in p["nombre"].lower()]
     if not encontrados:
         print(f"No se encontró '{nombre}'")
     return encontrados
 
-def actualizar_producto(inventario, nombre, nueva_cantidad=None, nuevo_precio=None):
-    """Actualiza un producto si existe."""
+def actualizar_producto(inventario):
+    nombre = input("Nombre del producto a actualizar: ").strip()
     for p in inventario:
         if p["nombre"].lower() == nombre.lower():
-            if nueva_cantidad is not None:
-                p["cantidad"] = nueva_cantidad
-            if nuevo_precio is not None:
-                p["precio"] = nuevo_precio
-            print(f"Producto '{nombre}' actualizado")
-            return
-    print(f"Producto '{nombre}' no encontrado")
+            print("Deja vacío para omitir el cambio.")
+            #pedir la cantidad
+            nueva_cant = input("Nueva cantidad: ").strip()
+            if nueva_cant != "":
+                try:
+                    nueva_cant = int(nueva_cant)
+                    p["cantidad"] = nueva_cant
+                except ValueError:
+                    print("Cantidad inválida. No se modificó.")
+            # ingresar el nuevo precio
+            nuevo_precio = input("Nuevo precio: ").strip()
+            if nuevo_precio != "":
+                try:
+                    nuevo_precio = float(nuevo_precio)
+                    p["precio"] = nuevo_precio
+                except ValueError:
+                    print("Precio inválido. No se modificó.")
 
-def eliminar_producto(inventario, nombre):
-    """Elimina un producto por nombre."""
+            print(f"Producto '{p['nombre']}' actualizado.")
+            return
+    print(f"Producto '{nombre}' no encontrado.")
+
+def eliminar_producto(inventario):
+    nombre = input("ingrese el nombre del producto a eliminar: ")
     for i, p in enumerate(inventario):
         if p["nombre"].lower() == nombre.lower():
             inventario.pop(i)
@@ -41,7 +62,6 @@ def eliminar_producto(inventario, nombre):
     print(f"Producto '{nombre}' no encontrado")
 
 def calcular_estadisticas(inventario):
-    """Calcula estadísticas del inventario."""
     if not inventario:
         return {"unidades_totales": 0, "valor_total": 0, "producto_mas_caro": None, "producto_mayor_stock": None}
 

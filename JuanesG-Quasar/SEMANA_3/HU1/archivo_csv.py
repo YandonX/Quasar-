@@ -1,13 +1,7 @@
 import csv
 
-def guardar_csv(inventario, ruta, incluir_header=True):
-    """Guarda el inventario en un archivo CSV.
-    
-    Parámetros:
-        inventario (list): Lista de diccionarios con productos.
-        ruta (str): Ruta del archivo CSV.
-        incluir_header (bool): Si True, escribe encabezado.
-    """
+def guardar_csv(inventario, ruta):
+    """Guarda el inventario en CSV de forma simple."""
     if not inventario:
         print("Inventario vacío. No se puede guardar.")
         return
@@ -15,54 +9,71 @@ def guardar_csv(inventario, ruta, incluir_header=True):
     try:
         with open(ruta, "w", newline="", encoding="utf-8") as file:
             writer = csv.writer(file)
-            if incluir_header:
-                writer.writerow(["nombre", "precio", "cantidad"])
-            for prod in inventario:
-                writer.writerow([prod["nombre"], prod["precio"], prod["cantidad"]])
+            writer.writerow(["nombre", "precio", "cantidad"])
+
+            for p in inventario:
+                writer.writerow([p["nombre"], p["precio"], p["cantidad"]])
+
         print(f"Inventario guardado en: {ruta}")
-    except PermissionError:
-        print("Error: No se puede escribir en el archivo (permiso denegado).")
+
     except Exception as e:
-        print(f"Error inesperado: {e}")
+        print(f"Error guardando CSV: {e}")
+
 
 def cargar_csv(ruta):
-    """Carga un CSV y retorna lista de productos válidos.
-    
-    Parámetros:
-        ruta (str): Ruta del archivo CSV.
-    Retorna:
-        lista de diccionarios con productos.
-    """
+    """Carga CSV y retorna inventario como lista de diccionarios."""
     inventario = []
     errores = 0
 
     try:
         with open(ruta, "r", encoding="utf-8") as file:
             reader = csv.DictReader(file)
-            # Validar encabezado
+
             if reader.fieldnames != ["nombre", "precio", "cantidad"]:
-                print("Error: Encabezado inválido")
+                print("Error: encabezado CSV inválido.")
                 return []
 
             for fila in reader:
                 try:
-                    nombre = fila["nombre"].strip()
-                    precio = float(fila["precio"])
-                    cantidad = int(fila["cantidad"])
-                    if precio < 0 or cantidad < 0:
-                        raise ValueError
-                    inventario.append({"nombre": nombre, "precio": precio, "cantidad": cantidad})
-                except (ValueError, KeyError):
+                    inventario.append({
+                        "nombre": fila["nombre"].strip(),
+                        "precio": float(fila["precio"]),
+                        "cantidad": int(fila["cantidad"])
+                    })
+                except:
                     errores += 1
+
         if errores:
-            print(f"{errores} filas inválidas omitidas")
+            print(f"{errores} filas inválidas omitidas.")
+
         return inventario
+
     except FileNotFoundError:
-        print("Archivo no encontrado")
-        return []
-    except UnicodeDecodeError:
-        print("Error al leer el archivo (codificación inválida)")
+        print("Archivo no encontrado.")
         return []
     except Exception as e:
-        print(f"Error inesperado: {e}")
+        print(f"Error cargando CSV: {e}")
         return []
+
+def cargar_fusionar(inventario, archivo):
+    cargados = cargar_csv(archivo)
+    if not cargados:
+        print("No se cargó nada.")
+        return inventario
+    decision = input("Deseas sobreescribir el inventario, (1) si, (2) no : ").strip().upper()
+    if decision == "S":
+        print("Inventario sobrescrito.")
+        return cargados
+    # Si NO sobrescribe → fusionar
+    print("Fusionando inventarios...")
+    # Crear mapa para búsqueda rápida
+    mapa = {p["nombre"].lower(): p for p in inventario}
+    for nuevo in cargados:
+        nombre = nuevo["nombre"].lower()
+        if nombre in mapa:
+            mapa[nombre]["cantidad"] += nuevo["cantidad"]
+            mapa[nombre]["precio"] = nuevo["precio"]
+        else:
+            inventario.append(nuevo)
+    print("Inventarios fusionados correctamente.")
+    return inventario
